@@ -1,11 +1,10 @@
 package com.axlero.dto;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.Instant;
 
 @Data
 @AllArgsConstructor
@@ -16,14 +15,15 @@ public class CustomerResponseDto {
 
     private String name;
 
-    @Email(message = "Valid email required")
     private String email;
-
-    @NotBlank(message = "Password is required")
-    @Size(min = 6, message = "Password must be at least 5 characters")
-    private String password;
 
     private String phone;
 
     private String roles;
+
+    private String password;
+
+    private Instant createdAt;
+
+    private Instant updatedAt;
 }

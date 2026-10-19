@@ -1,9 +1,9 @@
 server:
   port: 9090
+
 spring:
   application:
     name: user-service
-
 
   datasource:
     url: jdbc:mysql://localhost:3306/user-service
@@ -11,17 +11,22 @@ spring:
     password: root
     driver-class-name: com.mysql.cj.jdbc.Driver
 
-    jpa:
-      show-sql: true
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
       hibernate:
-        ddl-auto: update
-      properties:
-        hibernate:
-          format_sql: true
-          dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
 
 app:
   jwt:
     secret: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
     expiration-ms: 86400000
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
 
