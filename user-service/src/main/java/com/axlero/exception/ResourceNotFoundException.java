@@ -1,11 +1,4 @@
 package com.axlero.exception;
 
-public class ResourceNotFoundException extends RuntimeException{
-
-    public ResourceNotFoundException(String message) {
-        super(message);
-    }
-
-    public ResourceNotFoundException() {
-    }
+public class ResourceNotFoundException extends RuntimeException {
 }
