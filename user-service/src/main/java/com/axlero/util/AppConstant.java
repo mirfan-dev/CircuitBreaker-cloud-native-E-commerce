@@ -4,7 +4,7 @@ public class AppConstant {
 
 
     public static final String[] PUBLIC_URLS = {
-            "/users/**",
+            "api/users/**",
 
     };
 }
