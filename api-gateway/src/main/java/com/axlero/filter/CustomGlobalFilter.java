@@ -7,18 +7,19 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
-@Component
 @Slf4j
-public class CustomGloblaFilter implements GlobalFilter {
+@Component
+public class CustomGlobalFilter implements GlobalFilter {
+
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         String method = exchange.getRequest().getMethod().name();
         String path   = exchange.getRequest().getURI().getPath();
 
         log.info("Global filter: request intercepted ,{} {}", method, path);
+
         return chain.filter(exchange)
-                .then(Mono.fromRunnable(()-> {
-                    System.out.println("Global filter: Response Completed");
-                }));
+                .then(Mono.fromRunnable(() ->
+                        log.info("Global filter: response completed ,{} {}", method, path)));
     }
 }
