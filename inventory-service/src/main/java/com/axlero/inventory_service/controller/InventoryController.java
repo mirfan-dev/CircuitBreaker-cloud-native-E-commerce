@@ -3,6 +3,7 @@ package com.axlero.inventory_service.controller;
 
 import com.axlero.inventory_service.dto.InventoryRequest;
 import com.axlero.inventory_service.dto.InventoryResponse;
+import com.axlero.inventory_service.event.OrderPlacedEvent;
 import com.axlero.inventory_service.service.InventoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +24,10 @@ public class InventoryController {
     }
 
     @PostMapping
-    public ResponseEntity<InventoryResponse> addInventory(@Valid @RequestBody InventoryRequest request) {
-        InventoryResponse response = inventoryService.addInventory(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    public ResponseEntity<Void> addInventory(@Valid @RequestBody InventoryRequest request) {
+        inventoryService.addInventory(request);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
+
+
 }
