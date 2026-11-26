@@ -32,4 +32,8 @@ public class ProductRequestDto {
     private String imageUrl;
 
     private String categoryId;
+
+    private String userId;
+
+
 }

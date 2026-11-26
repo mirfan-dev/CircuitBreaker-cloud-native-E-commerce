@@ -1,5 +1,6 @@
 package com.axlero.service.impl;
 
+import com.axlero.dto.CustomerResponseDto;
 import com.axlero.dto.ProductRequestDto;
 import com.axlero.dto.ProductResponseDto;
 import com.axlero.entity.Category;
@@ -10,6 +11,7 @@ import com.axlero.payload.FileData;
 import com.axlero.repository.ProductRepository;
 import com.axlero.service.FileService;
 import com.axlero.service.ProductService;
+import com.axlero.service.external.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -23,6 +25,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.IOException;
 
@@ -40,6 +43,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
     private final FileService fileService;
+    private final UserService userService;
 
     @Value("${app.file.banner-path}")
     private String bannerFolderPath;
@@ -105,7 +109,13 @@ public class ProductServiceImpl implements ProductService {
     public ProductResponseDto getProductById(String id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found: " + id));
-        return productMapper.toResponseDto(product);
+        CustomerResponseDto customerResponseDto =userService.getById(product.getUserId());
+
+
+        ProductResponseDto response = productMapper.toResponseDto(product);
+
+        response.setCustomerResponseDto(customerResponseDto);
+        return response;
     }
 
     //  GET ALL
