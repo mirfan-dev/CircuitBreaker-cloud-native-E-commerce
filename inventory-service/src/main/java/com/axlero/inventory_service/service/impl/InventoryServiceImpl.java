@@ -10,12 +10,14 @@ import com.axlero.inventory_service.mapper.InventoryMapper;
 import com.axlero.inventory_service.repository.InventoryRepository;
 import com.axlero.inventory_service.service.InventoryService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class InventoryServiceImpl implements InventoryService {
@@ -25,6 +27,7 @@ public class InventoryServiceImpl implements InventoryService {
 
     @Override
     public InventoryResponse checkInventory(String skuCode) {
+        log.debug("Checking inventory for skuCode: {}", skuCode);
         Inventory inventory = inventoryRepository.findBySkuCode(skuCode)
                 .orElseThrow(() -> new InventoryNotFoundException("Inventory not found for SKU: " + skuCode));
 
@@ -44,19 +47,33 @@ public class InventoryServiceImpl implements InventoryService {
         inventoryRepository.save(entity);
     }
 
-    public void updateStock(OrderPlacedEvent event){
+    @Override
+    @Transactional
+    public void updateStock(OrderPlacedEvent event) {
+        log.info("Received OrderPlacedEvent for stock update: eventId={}, orderId={}, skuCode={}, orderedQuantity={}",
+                event.getEventId(), event.getOrderId(), event.getSkuCode(), event.getQuantity());
 
         Inventory inventory = inventoryRepository.findBySkuCode(event.getSkuCode())
-                .orElseThrow(() -> new InventoryAlreadyExistsException(
-                    "Inventory not found with skuCode: " + event.getSkuCode()));
+                .orElseThrow(() -> {
+                    log.error("Inventory not found for skuCode: {}", event.getSkuCode());
+                    return new InventoryNotFoundException(
+                            "Inventory not found with skuCode: " + event.getSkuCode());
+                });
+
+        log.info("Current inventory found: skuCode={}, availableQuantity={}",
+                inventory.getSkuCode(), inventory.getQuantity());
 
         Integer availableQuantity = inventory.getQuantity();
         Integer orderedQuantity = event.getQuantity();
 
-        if (availableQuantity < orderedQuantity){
+        if (availableQuantity < orderedQuantity) {
             throw new ResourceNotFoundException("Insufficient stock for this skuCode");
         }
-        inventory.setQuantity(availableQuantity- orderedQuantity);
+
+        inventory.setQuantity(availableQuantity - orderedQuantity);
         inventoryRepository.save(inventory);
+
+        log.info("Stock updated successfully for skuCode: {}. New quantity: {}",
+                inventory.getSkuCode(), inventory.getQuantity());
     }
 }

@@ -18,7 +18,7 @@ public class UserService {
     public CustomerResponseDto getById(String restId) {
         return webClientBuilder.build()
                 .get()
-                .uri("http://USER-SERVICE/users/api/{id}", restId)
+                .uri("http://USER-SERVICE/api/users/{id}", restId)   // ← /api/users
                 .retrieve()
                 .bodyToMono(CustomerResponseDto.class)
                 .block();
@@ -27,7 +27,7 @@ public class UserService {
     public List<CustomerResponseDto> getAll() {
         return webClientBuilder.build()
                 .get()
-                .uri("http://USER-SERVICE/users/api")
+                .uri("http://USER-SERVICE/api/users")                // ← /api/users
                 .retrieve()
                 .bodyToFlux(CustomerResponseDto.class)
                 .collectList()

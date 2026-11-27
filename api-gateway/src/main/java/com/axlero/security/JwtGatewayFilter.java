@@ -23,6 +23,8 @@ public class JwtGatewayFilter implements GatewayFilter, Ordered {
     private final JwtToken jwtToken;
 
 
+
+
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
 
@@ -33,7 +35,7 @@ public class JwtGatewayFilter implements GatewayFilter, Ordered {
         }
 
         String authHeader= exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
-        if (authHeader == null && authHeader.startsWith("Bearer ")){
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             return unauthorized(exchange);
         }
         String token = authHeader.substring(7);
@@ -72,14 +74,14 @@ public class JwtGatewayFilter implements GatewayFilter, Ordered {
 
     private static final Map<String, Map<String, List<String>>> ROLE_API_PERMISSION = Map.of(
             "ADMIN", Map.of(
-                    "GET", List.of("/api/products", "/api/categories", "/api/orders", "/api/payments"),
-                    "POST", List.of("/api/products", "/api/categories", "/api/inventory"),
-                    "PUT", List.of("/api/products", "/api/categories", "/api/payments"),
+                    "GET",    List.of("/api/products", "/api/categories", "/api/orders"),
+                    "POST",   List.of("/api/products", "/api/categories", "/api/inventory"),
+                    "PUT",    List.of("/api/products", "/api/categories"),
                     "DELETE", List.of("/api/products", "/api/categories")
             ),
             "USER", Map.of(
-                    "GET", List.of("/api/products", "/api/categories", "/api/inventory", "/api/payments"),
-                    "POST", List.of("/api/categories", "/api/products", "/api/order", "/api/payment")
+                    "GET",  List.of("/api/products", "/api/categories", "/api/inventory"),
+                    "POST", List.of("/api/order")
             )
     );
 
