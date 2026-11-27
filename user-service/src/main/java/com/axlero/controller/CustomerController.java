@@ -24,6 +24,7 @@ public class CustomerController {
     public ResponseEntity<CustomerResponseDto> register(
             @Valid @RequestBody CustomerRequestDto request) {
         CustomerResponseDto response = customerService.createCustomer(request);
+
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 

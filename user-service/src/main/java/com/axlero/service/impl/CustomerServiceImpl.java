@@ -38,7 +38,12 @@ public class CustomerServiceImpl implements CustomerService {
         Customer customer = customerMapper.toEntity(request);
         customer.setId(UUID.randomUUID().toString());
         customer.setPassword(passwordEncoder.encode(request.getPassword()));
+
+        if (customer.getRoles() == null || customer.getRoles().isBlank()) {
+            customer.setRoles("USER");
+        }
         Customer saved = customerRepository.save(customer);
+
         return customerMapper.toResponse(saved);
     }
 
