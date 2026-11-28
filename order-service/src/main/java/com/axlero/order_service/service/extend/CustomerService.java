@@ -1,9 +1,7 @@
-package com.axlero.service.external;
+package com.axlero.order_service.service.extend;
 
-import com.axlero.config.AppConstants;
-import com.axlero.dto.CustomerResponseDto;
+import com.axlero.order_service.dto.CustomerResponseDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -11,14 +9,15 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class CustomerService {
 
     private final WebClient.Builder webClientBuilder;
 
-    public CustomerResponseDto getById(String restId) {
+    public CustomerResponseDto getById(String userId) {
+
         return webClientBuilder.build()
                 .get()
-                .uri("http://USER-SERVICE/api/users/{id}", restId)   // ← /api/users
+                .uri("http://USER-SERVICE/api/users/{id}", userId)
                 .retrieve()
                 .bodyToMono(CustomerResponseDto.class)
                 .block();

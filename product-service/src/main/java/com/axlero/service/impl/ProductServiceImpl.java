@@ -1,6 +1,5 @@
 package com.axlero.service.impl;
 
-import com.axlero.dto.CustomerResponseDto;
 import com.axlero.dto.ProductRequestDto;
 import com.axlero.dto.ProductResponseDto;
 import com.axlero.entity.Category;
@@ -11,7 +10,7 @@ import com.axlero.payload.FileData;
 import com.axlero.repository.ProductRepository;
 import com.axlero.service.FileService;
 import com.axlero.service.ProductService;
-import com.axlero.service.external.UserService;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -20,16 +19,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import java.io.IOException;
 
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Date;
@@ -43,7 +38,6 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
     private final FileService fileService;
-    private final UserService userService;
 
     @Value("${app.file.banner-path}")
     private String bannerFolderPath;
@@ -109,13 +103,8 @@ public class ProductServiceImpl implements ProductService {
     public ProductResponseDto getProductById(String id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found: " + id));
-        CustomerResponseDto customerResponseDto =userService.getById(product.getUserId());
 
-
-        ProductResponseDto response = productMapper.toResponseDto(product);
-
-        response.setCustomerResponseDto(customerResponseDto);
-        return response;
+        return productMapper.toResponseDto(product);
     }
 
     //  GET ALL

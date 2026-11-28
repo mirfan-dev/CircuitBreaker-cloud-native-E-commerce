@@ -1,3 +1,4 @@
+
 server:
   port: 9091
 
@@ -15,7 +16,9 @@ spring:
           enabled: false
 
       routes:
-        # 1. Business API Routes (Protected by CustomRouteFilter)
+
+        # ================= BUSINESS API ROUTES =================
+
         - id: USER-SERVICE
           uri: lb://USER-SERVICE
           predicates:
@@ -44,40 +47,69 @@ spring:
           filters:
             - CustomRouteFilter
 
+        # ================= SWAGGER DOCUMENTATION ROUTES =================
 
+        - id: USER-SERVICE-DOCS
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/service-docs/user-service
+          filters:
+            - RewritePath=/service-docs/user-service, /v3/api-docs
 
+        - id: PRODUCT-SERVICE-DOCS
+          uri: lb://PRODUCT-SERVICE
+          predicates:
+            - Path=/service-docs/product-service
+          filters:
+            - RewritePath=/service-docs/product-service, /v3/api-docs
 
+        - id: INVENTORY-SERVICE-DOCS
+          uri: lb://INVENTORY-SERVICE
+          predicates:
+            - Path=/service-docs/inventory-service
+          filters:
+            - RewritePath=/service-docs/inventory-service, /v3/api-docs
 
+        - id: ORDER-SERVICE-DOCS
+          uri: lb://ORDER-SERVICE
+          predicates:
+            - Path=/service-docs/order-service
+          filters:
+            - RewritePath=/service-docs/order-service, /v3/api-docs
 
 eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka
+  instance:
+    prefer-ip-address: true
 
 app:
   jwt:
-    secret: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+    secret: ${JWT_SECRET:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
     expiration-ms: 86400000
 
 springdoc:
   api-docs:
     enabled: true
+
   swagger-ui:
     enabled: true
     path: /swagger-ui.html
     config-url: /v3/api-docs/swagger-config
+    disable-swagger-default-url: true
     urls:
       - name: API GATEWAY SERVICE
         url: /v3/api-docs
 
       - name: USER-SERVICE
-        url: /v3/api-docs/user-service
+        url: /service-docs/user-service
 
       - name: PRODUCT-SERVICE
-        url: /v3/api-docs/product-service
+        url: /service-docs/product-service
 
       - name: INVENTORY-SERVICE
-        url: /v3/api-docs/inventory-service
+        url: /service-docs/inventory-service
 
       - name: ORDER-SERVICE
-        url: /v3/api-docs/order-service
+        url: /service-docs/order-service

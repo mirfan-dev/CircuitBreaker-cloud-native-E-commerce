@@ -42,9 +42,6 @@ public class Product {
     private Category category;
 
 
-    @Column(nullable = false)
-    private String userId;
-
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;

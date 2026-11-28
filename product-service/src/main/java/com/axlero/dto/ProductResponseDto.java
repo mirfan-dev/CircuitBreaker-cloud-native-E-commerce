@@ -36,8 +36,6 @@ public class ProductResponseDto {
 
     private String categoryId;
 
-    private CustomerResponseDto customerResponseDto;
-
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
