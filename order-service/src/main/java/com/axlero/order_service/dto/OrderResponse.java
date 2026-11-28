@@ -1,5 +1,6 @@
 package com.axlero.order_service.dto;
 
+import com.axlero.order_service.enums.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,5 +14,11 @@ public class OrderResponse {
 
     private String orderNumber;
 
-    private String orderStatus;
+    private OrderStatus orderStatus;
+
+    private String customerId;
+
+    private CustomerResponseDto customerResponseDto;
+
+
 }

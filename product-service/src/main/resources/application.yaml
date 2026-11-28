@@ -29,8 +29,18 @@ spring:
 eureka:
   client:
     service-url:
-      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    prefer-ip-address: true
 
 app:
   file:
     banner-path: uploads/product_banner/
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: /v3/api-docs
+  swagger-ui:
+    enabled: true
+    path: /swagger-ui.html3

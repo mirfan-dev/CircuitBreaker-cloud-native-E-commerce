@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,4 +18,7 @@ public class InventoryRequest {
     private String skuCode;
     @Min(value = 0, message = "Quantity must be 0 or greater")
     private Integer quantity;
+
+
+
 }

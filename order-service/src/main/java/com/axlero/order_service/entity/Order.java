@@ -1,5 +1,6 @@
 package com.axlero.order_service.entity;
 
+import com.axlero.order_service.enums.OrderStatus;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -19,13 +20,15 @@ public class Order {
     @Id
     private String id;
 
+    private String customerId;
+
     private String orderNumber;
 
     private String skuCode;
 
     private Integer quantity;
 
-    private BigDecimal price;
+    private BigDecimal totalAmount;
 
-    private String orderStatus;
+    private OrderStatus orderStatus;
 }

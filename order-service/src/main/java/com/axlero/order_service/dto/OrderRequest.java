@@ -1,3 +1,4 @@
+
 package com.axlero.order_service.dto;
 
 import jakarta.validation.constraints.Min;
@@ -14,12 +15,14 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class OrderRequest {
 
-
-
     @NotBlank(message = "SKU code is mandatory")
     private String skuCode;
 
-    @Min(value = 1,message = "Quantity must be at least 1")
+    @NotBlank(message = "Customer ID is mandatory")
+    private String customerId;
+
+    @NotNull(message = "Quantity is mandatory")
+    @Min(value = 1, message = "Quantity must be at least 1")
     private Integer quantity;
 
     @NotNull(message = "Price is mandatory")

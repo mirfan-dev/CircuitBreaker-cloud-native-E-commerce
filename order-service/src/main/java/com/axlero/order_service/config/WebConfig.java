@@ -1,4 +1,4 @@
-package com.axlero.config;
+package com.axlero.order_service.config;
 
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
@@ -7,6 +7,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
 public class WebConfig {
+
 
     @Bean
     @LoadBalanced
